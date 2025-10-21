@@ -1,0 +1,84 @@
+#data_type
+
+1 = Khách hàng
+
+2 = Danh mục hàng hóa, vật tư, sản phẩm
+ ├──Thoát sàn 00005 GA INAX FDV-12F
+ ├──Gạch ốp lát men bóng 0242 (2v/h/3.24m )
+ ├──Gạch NICE Porcelain 30x60 đậm
+ ├──Gạch NICE Porcelain 30x60 nhạt
+
+3 = Danh mục kho hàng
+- NM gạch ACT
+- Kho hàng tấm tường ACT
+- Kho gạch Ấn Độ
+
+4 = Danh mục đơn vị tính
+Bao
+Bịch
+Bộ
+Cái
+
+5 = Tài khoản kế toán
+
+111  (Tiền mặt)
+ ├── 1111 (Tiền Việt Nam)
+ ├── 1112 (Ngoại tệ)
+ └── 1113 (Vàng tiền tệ)
+
+112  (Tiền gửi Ngân hàng)
+ ├── 1121 (Tiền Việt Nam - CÔNG TY)
+ │    ├── 1121.81 (VTB - VIGRES)
+ │    ├── 11211 (VTB - 114002882975)
+ │    ├── 11212 (VCB - 0591000266027)
+ │    ├── 11213 (VPBank - 251837888)
+ │    ├── 11214 (Bắc Á - 341001060001354)
+ │    ├── 11215 (ACB - 565558888)
+ │    ├── 11216 (VTB - 113003012699)
+ │    ├── 11217 (MB - 3990299999)
+ │    └── 11218 (VTB - 114676888888)
+ └── 1122 (Tiền Việt Nam - CÁ NHÂN)
+      ├── 1122.11 (MB - Đỗ Thị Thanh Tuyền)
+      ├── 1122.12 (VTB - Tuyền)
+      ├── 1122.21 (VTB - Nguyễn Thị Hiền - SR1)
+      └── 1122.22 (Nguyễn Thị Hiền - CF)
+
+
+
+6 = Đơn vị tổ chức
+
+CÔNG TY CỔ PHẦN GẠCH ỐP LÁT HOÀNG GIA (HGHY)
+├── HGHY_01: TỔNG CÔNG TY - 2025
+│   └── KT: Kế toán
+├── HGHY_02: KHO HOÀNG GIA HY - 2025
+│   └── TK HGHY: Kho Hoàng Gia HY
+├── SRHG1: SR YÊN PHÚ - 2025
+│   └── SR: SR Yên Phú
+├── SRHG2: SR ĐÔNG KẾT - 2025
+├── SRHG3: SR LÝ THƯỜNG KIỆT (NHÀ VIỆT) - 2025
+│   └── SRNHAVIET: SR Nhà Việt
+├── SRHG4: KHO THUẬN PHÁT - 2025
+│   ├── Phòng Kế toán
+│   └── SR THUẬN PHÁT - 2025
+└── SRHG5: CAFE
+    └── Pbh: Phòng bán hàng
+
+
+8 = Tài khoản ngân hàng (Bank Account)
+
+9 = Khoản mục chi phí
+"Chi phí xe 03493"
+"Chi phí ăn uống tại công ty"
+"Chi phí bán hàng"
+"Chi phí bốc xếp"
+"Bù vỡ"
+"Chiết khấu bán hàng"
+"CP camera"
+
+11 = Điều khoản thanh toán
+Thanh toán ngay
+Thanh toán ngay (bản khác, có dấu cách thừa)
+Thanh toán sau
+Thanh toán trước
+
+12 = Danh sách ngân hàng
