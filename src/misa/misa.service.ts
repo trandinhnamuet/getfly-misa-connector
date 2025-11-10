@@ -78,7 +78,6 @@ export class MisaService implements OnModuleInit {
             total_vat_amount_oc: (orderData.total_amount || 1050000.0) * 0.05,
             total_vat_amount: (orderData.total_amount || 1050000.0) * 0.05,
             branch_id: MISA_CONFIG.default_branch_id,
-            organization_unit_id: MISA_CONFIG.default_organization_unit_id,
             detail: [
               {
                 inventory_item_id: MISA_CONFIG.default_inventory_item_id,

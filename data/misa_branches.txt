@@ -1,0 +1,125 @@
+{
+  "branches": [
+    {
+      "organization_unit_id": "9ff015c9-35d7-436f-9fa1-336f5424338c",
+      "organization_unit_code": "HGHY",
+      "organization_unit_name": "CÔNG TY CỔ PHẦN GẠCH ỐP LÁT HOÀNG GIA",
+      "organization_unit_type_id": 1,
+      "branch_id": "9ff015c9-35d7-436f-9fa1-336f5424338c"
+    },
+    {
+      "organization_unit_id": "4e3f3d50-6335-4588-86f7-f48ff91dec9d",
+      "organization_unit_code": "HGHY_01",
+      "organization_unit_name": "TỔNG CÔNG TY - 2025",
+      "parent_id": "9ff015c9-35d7-436f-9fa1-336f5424338c",
+      "organization_unit_type_id": 2,
+      "branch_id": "4e3f3d50-6335-4588-86f7-f48ff91dec9d"
+    },
+    {
+      "organization_unit_id": "399def5c-a246-4974-9219-cf6752afc88e",
+      "organization_unit_code": "KT",
+      "organization_unit_name": "Kế toán",
+      "parent_id": "4e3f3d50-6335-4588-86f7-f48ff91dec9d",
+      "organization_unit_type_id": 4,
+      "branch_id": "4e3f3d50-6335-4588-86f7-f48ff91dec9d"
+    },
+    {
+      "organization_unit_id": "b0ac3a23-09ff-4bd4-b25b-d21901cc86fe",
+      "organization_unit_code": "HGHY_02",
+      "organization_unit_name": "KHO HOÀNG GIA HY - 2025",
+      "parent_id": "9ff015c9-35d7-436f-9fa1-336f5424338c",
+      "organization_unit_type_id": 2,
+      "branch_id": "b0ac3a23-09ff-4bd4-b25b-d21901cc86fe"
+    },
+    {
+      "organization_unit_id": "0699830c-1ef1-4d81-9f1b-916aa0c5a022",
+      "organization_unit_code": "TK HGHY",
+      "organization_unit_name": "Kho Hoàng gia HY",
+      "parent_id": "b0ac3a23-09ff-4bd4-b25b-d21901cc86fe",
+      "organization_unit_type_id": 4,
+      "branch_id": "b0ac3a23-09ff-4bd4-b25b-d21901cc86fe"
+    },
+    {
+      "organization_unit_id": "f5e41242-bbc2-4d64-931d-4996ba1b4857",
+      "organization_unit_code": "SRHG1",
+      "organization_unit_name": "SR YÊN PHÚ- 2025",
+      "parent_id": "9ff015c9-35d7-436f-9fa1-336f5424338c",
+      "organization_unit_type_id": 2,
+      "branch_id": "f5e41242-bbc2-4d64-931d-4996ba1b4857"
+    },
+    {
+      "organization_unit_id": "b3cadda1-6e37-4e27-9836-cd13b5bdaf96",
+      "organization_unit_code": "SR",
+      "organization_unit_name": "SR Yên Phú ",
+      "parent_id": "f5e41242-bbc2-4d64-931d-4996ba1b4857",
+      "organization_unit_type_id": 4,
+      "branch_id": "f5e41242-bbc2-4d64-931d-4996ba1b4857"
+    },
+    {
+      "organization_unit_id": "cb4662eb-a92b-454a-aea6-03c5d283463f",
+      "organization_unit_code": "SRHG2",
+      "organization_unit_name": "SR ĐÔNG KẾT - 2025",
+      "parent_id": "9ff015c9-35d7-436f-9fa1-336f5424338c",
+      "organization_unit_type_id": 2,
+      "branch_id": "cb4662eb-a92b-454a-aea6-03c5d283463f"
+    },
+    {
+      "organization_unit_id": "d501cc43-326d-47a8-8286-a1fae4e23263",
+      "organization_unit_code": "SRHG3",
+      "organization_unit_name": "SR LÝ THƯỜNG KIỆT (NHÀ VIỆT) - 2025",
+      "parent_id": "9ff015c9-35d7-436f-9fa1-336f5424338c",
+      "organization_unit_type_id": 2,
+      "branch_id": "d501cc43-326d-47a8-8286-a1fae4e23263"
+    },
+    {
+      "organization_unit_id": "52a48902-268a-44ba-8e0c-e9d037da5e61",
+      "organization_unit_code": "SRNHAVIET",
+      "organization_unit_name": "SR nhà Việt",
+      "parent_id": "d501cc43-326d-47a8-8286-a1fae4e23263",
+      "organization_unit_type_id": 4,
+      "branch_id": "d501cc43-326d-47a8-8286-a1fae4e23263"
+    },
+    {
+      "organization_unit_id": "79394585-915b-4ad6-8412-107f631f4d4d",
+      "organization_unit_code": "SRHG4",
+      "organization_unit_name": "KHO THUẬN PHÁT - 2025",
+      "parent_id": "9ff015c9-35d7-436f-9fa1-336f5424338c",
+      "organization_unit_type_id": 2,
+      "branch_id": "79394585-915b-4ad6-8412-107f631f4d4d"
+    },
+    {
+      "organization_unit_id": "6fc45922-f0cb-4b06-ad18-b0a3a1e09c09",
+      "organization_unit_code": "Phòng Kế toán",
+      "organization_unit_name": "Phòng Kế toán",
+      "parent_id": "79394585-915b-4ad6-8412-107f631f4d4d",
+      "organization_unit_type_id": 4,
+      "branch_id": "79394585-915b-4ad6-8412-107f631f4d4d"
+    },
+    {
+      "organization_unit_id": "eebf5278-9f0a-4e0b-abd0-256752903a10",
+      "organization_unit_code": "SR THUẬN PHÁT - 2025",
+      "organization_unit_name": "SR THUẬN PHÁT - 2025",
+      "parent_id": "79394585-915b-4ad6-8412-107f631f4d4d",
+      "organization_unit_type_id": 4,
+      "branch_id": "79394585-915b-4ad6-8412-107f631f4d4d"
+    },
+    {
+      "organization_unit_id": "9ed29929-f8d2-4ef7-8fa0-86538e601196",
+      "organization_unit_code": "SRHG5",
+      "organization_unit_name": "CAFE",
+      "parent_id": "9ff015c9-35d7-436f-9fa1-336f5424338c",
+      "organization_unit_type_id": 2,
+      "branch_id": "9ed29929-f8d2-4ef7-8fa0-86538e601196"
+    },
+    {
+      "organization_unit_id": "7cccc717-72ce-4eb5-ac31-a9a40a4671b9",
+      "organization_unit_code": "Pbh",
+      "organization_unit_name": "Phòng bán hàng",
+      "parent_id": "9ed29929-f8d2-4ef7-8fa0-86538e601196",
+      "organization_unit_type_id": 4,
+      "branch_id": "9ed29929-f8d2-4ef7-8fa0-86538e601196"
+    }
+  ],
+  "fetched_at": "2025-11-10T16:25:18.575Z",
+  "total": 15
+}

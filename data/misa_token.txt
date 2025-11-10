@@ -1,0 +1,7 @@
+{
+  "access_token": "3g1gdlGEl0Q907EEgm/sfaUfRrJNXJO/KSBN/oCjAZq2b8spZbYO03qB1B3nSYVB//EnbWcAPALjvonOiDNsjk1Mi1yL3LhsCZKrpISAqd5s9H2eZcI8s7g6WRkh9VvlOkvUaqhMt2LRytTCqu4Dbxw5FmMmcI4cod3T2kVgIyTmwV9HT+E/EBvKcGyL1CSZ",
+  "expired_time": "2025-11-11T11:25:17.251251+07:00",
+  "tenant_code": "nea2l4q2",
+  "app_name": "CÔNG TY CỔ PHẦN GẠCH ỐP LÁT HOÀNG GIA",
+  "updated_at": "2025-11-10T16:25:18.535Z"
+}
