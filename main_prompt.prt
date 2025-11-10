@@ -1,0 +1,163 @@
+Code tiếp project này để thực hiện nhiệm vụ khi có đơn hàng được duyệt trên getfly crm, sẽ tạo 1 đề nghị sinh chứng từ trên misa amis kế toán. Vì server chạy rất yếu, bộ nhớ nhỏ, data cần lưu cũng không nhiều nên lưu trong file .txt thay vì trong database. 
+
+API misa để call cần có header X-MISA-AccessToken: {access_token} lấy từ api get access token
+
+Thứ tự chức năng cần code như sau:
+
+1. Get access token misa mỗi 23h 
+post https://actapp.misa.vn/api/oauth/actopen/connect
+payload: {
+  "app_id": "f0c16081-957c-4bd5-ae34-83e4548e0fd4",
+  "access_code": "LQcDsPYM/WsX9BgsPSoYvBcPYcDT55QGnHXretpttKNnwZ3Cbj/NYRpfL6LxZTpkAbCLkoFaaZJlKDCIBqXWMvML9W71KvtI4O384PCg+6mWjvT90j9cgdIgp/DBBHcyopbL3hwWNQYKGhJV/MHrD+bGKiBebfWhbLF/VisfSgkGjhop1SYUlcwLXkk/eKHr1578u0E3UvQNng6pjLRahclALTgfQkyX8D6zvriH7RNwEI9LeretGqu8Xv2DvEZywerXmeI6anE+mt69qYmvFg==",
+  "org_company_code": "actapp" 
+}
+
+demo response: {
+    "Success": true,
+    "ErrorMessage": "",
+    "Data": "{\"access_token\":\"3g1gdlGEl0Q907EEgm/sfaUfRrJNXJO/KSBN/oCjAZq2b8spZbYO03qB1B3nSYVB//EnbWcAPALjvonOiDNsjk1Mi1yL3LhsCZKrpISAqd5s9H2eZcI8s7g6WRkh9VvlX+Pe3T0myjQdhX16JW535oWD33XIQJdvbm3Ur9M9qsJcIvGigWOliYgbuf2ZGx/s\",\"tenant_code\":\"nea2l4q2\",\"app_name\":\"CÔNG TY CỔ PHẦN GẠCH ỐP LÁT HOÀNG GIA\",\"expired_time\":\"2025-11-11T09:17:01.6626625+07:00\",\"expired_time_ticks\":638984494216625347}"
+}
+
+2. Get list chi nhánh trong amis kế toán. Mục đích để lấy organization_unit_id cho payload của hàm cất đề nghị sinh chứng từ sau này. Chỉ cần call 1 lần duy nhất khi chạy dự án. Lưu vài 1 file .txt
+
+post https://actapp.misa.vn/apir/sync/actopen/get_dictionary
+payload: {
+    "data_type": 6,
+    "branch_id": null,
+    "skip": 0,
+    "take": 1000,
+    "app_id": "f0c16081-957c-4bd5-ae34-83e4548e0fd4",
+    "last_sync_time": null
+}
+
+response: {
+    "Success": true,
+    "ErrorMessage": "",
+    "Data": "[{\"organization_unit_id\":\"9ff015c9-35d7-436f-9fa1-336f5424338c\",\"organization_unit_code\":\"HGHY\",\"organization_unit_name\":\"CÔNG TY CỔ PHẦN GẠCH ỐP LÁT HOÀNG GIA\",\"organization_unit_type_id\":1,\"branch_id\":\"9ff015c9-35d7-436f-9fa1-336f5424338c\"},{\"organization_unit_id\":\"4e3f3d50-6335-4588-86f7-f48ff91dec9d\",\"organization_unit_code\":\"HGHY_01\",\"organization_unit_name\":\"TỔNG CÔNG TY - 2025\",\"parent_id\":\"9ff015c9-35d7-436f-9fa1-336f5424338c\",\"organization_unit_type_id\":2,\"branch_id\":\"4e3f3d50-6335-4588-86f7-f48ff91dec9d\"},{\"organization_unit_id\":\"399def5c-a246-4974-9219-cf6752afc88e\",\"organization_unit_code\":\"KT\",\"organization_unit_name\":\"Kế toán\",\"parent_id\":\"4e3f3d50-6335-4588-86f7-f48ff91dec9d\",\"organization_unit_type_id\":4,\"branch_id\":\"4e3f3d50-6335-4588-86f7-f48ff91dec9d\"},{\"organization_unit_id\":\"b0ac3a23-09ff-4bd4-b25b-d21901cc86fe\",\"organization_unit_code\":\"HGHY_02\",\"organization_unit_name\":\"KHO HOÀNG GIA HY - 2025\",\"parent_id\":\"9ff015c9-35d7-436f-9fa1-336f5424338c\",\"organization_unit_type_id\":2,\"branch_id\":\"b0ac3a23-09ff-4bd4-b25b-d21901cc86fe\"},{\"organization_unit_id\":\"0699830c-1ef1-4d81-9f1b-916aa0c5a022\",\"organization_unit_code\":\"TK HGHY\",\"organization_unit_name\":\"Kho Hoàng gia HY\",\"parent_id\":\"b0ac3a23-09ff-4bd4-b25b-d21901cc86fe\",\"organization_unit_type_id\":4,\"branch_id\":\"b0ac3a23-09ff-4bd4-b25b-d21901cc86fe\"},{\"organization_unit_id\":\"f5e41242-bbc2-4d64-931d-4996ba1b4857\",\"organization_unit_code\":\"SRHG1\",\"organization_unit_name\":\"SR YÊN PHÚ- 2025\",\"parent_id\":\"9ff015c9-35d7-436f-9fa1-336f5424338c\",\"organization_unit_type_id\":2,\"branch_id\":\"f5e41242-bbc2-4d64-931d-4996ba1b4857\"},{\"organization_unit_id\":\"b3cadda1-6e37-4e27-9836-cd13b5bdaf96\",\"organization_unit_code\":\"SR\",\"organization_unit_name\":\"SR Yên Phú \",\"parent_id\":\"f5e41242-bbc2-4d64-931d-4996ba1b4857\",\"organization_unit_type_id\":4,\"branch_id\":\"f5e41242-bbc2-4d64-931d-4996ba1b4857\"},{\"organization_unit_id\":\"cb4662eb-a92b-454a-aea6-03c5d283463f\",\"organization_unit_code\":\"SRHG2\",\"organization_unit_name\":\"SR ĐÔNG KẾT - 2025\",\"parent_id\":\"9ff015c9-35d7-436f-9fa1-336f5424338c\",\"organization_unit_type_id\":2,\"branch_id\":\"cb4662eb-a92b-454a-aea6-03c5d283463f\"},{\"organization_unit_id\":\"d501cc43-326d-47a8-8286-a1fae4e23263\",\"organization_unit_code\":\"SRHG3\",\"organization_unit_name\":\"SR LÝ THƯỜNG KIỆT (NHÀ VIỆT) - 2025\",\"parent_id\":\"9ff015c9-35d7-436f-9fa1-336f5424338c\",\"organization_unit_type_id\":2,\"branch_id\":\"d501cc43-326d-47a8-8286-a1fae4e23263\"},{\"organization_unit_id\":\"52a48902-268a-44ba-8e0c-e9d037da5e61\",\"organization_unit_code\":\"SRNHAVIET\",\"organization_unit_name\":\"SR nhà Việt\",\"parent_id\":\"d501cc43-326d-47a8-8286-a1fae4e23263\",\"organization_unit_type_id\":4,\"branch_id\":\"d501cc43-326d-47a8-8286-a1fae4e23263\"},{\"organization_unit_id\":\"79394585-915b-4ad6-8412-107f631f4d4d\",\"organization_unit_code\":\"SRHG4\",\"organization_unit_name\":\"KHO THUẬN PHÁT - 2025\",\"parent_id\":\"9ff015c9-35d7-436f-9fa1-336f5424338c\",\"organization_unit_type_id\":2,\"branch_id\":\"79394585-915b-4ad6-8412-107f631f4d4d\"},{\"organization_unit_id\":\"6fc45922-f0cb-4b06-ad18-b0a3a1e09c09\",\"organization_unit_code\":\"Phòng Kế toán\",\"organization_unit_name\":\"Phòng Kế toán\",\"parent_id\":\"79394585-915b-4ad6-8412-107f631f4d4d\",\"organization_unit_type_id\":4,\"branch_id\":\"79394585-915b-4ad6-8412-107f631f4d4d\"},{\"organization_unit_id\":\"eebf5278-9f0a-4e0b-abd0-256752903a10\",\"organization_unit_code\":\"SR THUẬN PHÁT - 2025\",\"organization_unit_name\":\"SR THUẬN PHÁT - 2025\",\"parent_id\":\"79394585-915b-4ad6-8412-107f631f4d4d\",\"organization_unit_type_id\":4,\"branch_id\":\"79394585-915b-4ad6-8412-107f631f4d4d\"},{\"organization_unit_id\":\"9ed29929-f8d2-4ef7-8fa0-86538e601196\",\"organization_unit_code\":\"SRHG5\",\"organization_unit_name\":\"CAFE\",\"parent_id\":\"9ff015c9-35d7-436f-9fa1-336f5424338c\",\"organization_unit_type_id\":2,\"branch_id\":\"9ed29929-f8d2-4ef7-8fa0-86538e601196\"},{\"organization_unit_id\":\"7cccc717-72ce-4eb5-ac31-a9a40a4671b9\",\"organization_unit_code\":\"Pbh\",\"organization_unit_name\":\"Phòng bán hàng\",\"parent_id\":\"9ed29929-f8d2-4ef7-8fa0-86538e601196\",\"organization_unit_type_id\":4,\"branch_id\":\"9ed29929-f8d2-4ef7-8fa0-86538e601196\"}]",
+    "CustomData": "{\"LastSyncTime\":\"2025-11-10T21:32:02.6526524+07:00\",\"Message\":\"Hệ thống đã cải tiến cho phép lấy danh mục theo thời gian. Vui lòng truyền thêm tham số last_sync_time (VD: 2021-12-25 14:15:02) để lấy danh mục bị thay đổi tính từ khoảng thời gian truyền vào. Trong trường hợp không truyền last_sync_time sẽ nhận được kết quả là toàn bộ dữ liệu phân trang của danh mục.\"}"
+}
+
+3. Get list khách hàng lưu vào file .txt, vì bộ nhớ nhỏ nên chỉ lưu vài trường thôi. Khách hàng giữa misa kế toán và getfly crm ánh xạ nhau bằng trường số điện thoại (tel). Khách hàng không có số điện thoại trong misa kế toán thì vẫn lưu với sđt = null. Call lần đầu khi chạy project và update mỗi 24h (0h hàng ngày).
+
+post https://actapp.misa.vn/apir/sync/actopen/get_dictionary
+payload: {
+    "data_type": 1,
+    "branch_id": null,
+    "skip": 0,
+    "take": 1000,
+    "app_id": "f0c16081-957c-4bd5-ae34-83e4548e0fd4",
+    "last_sync_time": null
+}
+
+demo response: {
+    "Success": true,
+    "ErrorMessage": "",
+    "Data": "[{\"dictionary_type\":1,\"account_object_id\":\"667fa196-815b-40b1-8784-51f51d7c47c6\",\"account_object_type\":1,\"is_vendor\":false,\"is_local_object\":false,\"is_customer\":true,\"is_employee\":false,\"inactive\":false,\"receiptable_debt_amount\":0.0,\"account_object_code\":\"A AN DUYÊN\",\"account_object_name\":\"Anh An Duyên-0372619909\",\"address\":\"Đội 4 Phương trù \",\"einvoice_contact_name\":\"Anh An Duyên-0372619909\",\"is_same_address\":false,\"pay_account\":\"3311\",\"receive_account\":\"1311\",\"closing_amount\":0.0,\"reftype\":0,\"reftype_category\":0,\"branch_id\":\"cb4662eb-a92b-454a-aea6-03c5d283463f\",\"is_convert\":false,\"is_group\":false,\"is_sync_corp\":false,\"is_remind_debt\":true,\"isUpdateRebundant\":true,\"list_object_type\":0,\"database_id\":\"00000000-0000-0000-0000-000000000000\",\"isCustomPrimaryKey\":false,\"isFromProcessBalance\":false,\"IsSaveFromMasterData\":false,\"isDeleteMasterData\":false,\"isAddMasterData\":false,\"is_sync_awh\":true,\"excel_row_index\":0,\"is_valid\":false,\"created_date\":\"2025-05-04T10:24:57.1851857+07:00\",\"created_by\":\"Vũ Thu\",\"modified_date\":\"2025-05-04T10:24:57.1851857+07:00\",\"modified_by\":\"Vũ Thu\",\"auto_refno\":false,\"force_update\":true,\"state\":0,\"is_created_from_old_db\":false},{\"dictionary_type\":1,\"account_object_id\":\"462b8e86-1e2c-417e-9050-dc025236c094\",\"gender\":1,\"number_of_dependent\":0,\"account_object_type\":1,\"is_vendor\":false,\"is_local_object\":false,\"is_customer\":true,\"is_employee\":false,\"inactive\":false,\"agreement_salary\":0.0,\"salary_coefficient\":0.0,\"insurance_salary\":0.0,\"receiptable_debt_amount\":0.0,\"account_object_code\":\"A BẮC\",\"account_object_name\":\"Anh Bắc\",\"address\":\"Toàn Thắng- Hợp Hòa\",\"country\":\"Việt Nam\",\"is_same_address\":false,\"pay_account\":\"3311\",\"receive_account\":\"1311\",\"closing_amount\":0.0,\"reftype\":0,\"reftype_category\":0,\"branch_id\":\"cb4662eb-a92b-454a-aea6-03c5d283463f\",\"is_convert\":false,\"is_group\":false,\"is_sync_corp\":false,\"is_remind_debt\":true,\"isUpdateRebundant\":true,\"list_object_type\":0,\"database_id\":\"00000000-0000-0000-0000-000000000000\",\"isCustomPrimaryKey\":false,\"isFromProcessBalance\":false,\"IsSaveFromMasterData\":false,\"isDeleteMasterData\":false,\"isAddMasterData\":false,\"is_sync_awh\":true,\"excel_row_index\":0,\"is_valid\":false,\"created_date\":\"2025-02-23T14:06:54.7837839+07:00\",\"created_by\":\"Lê Thị Huyền Hương\",\"modified_date\":\"2025-02-23T14:11:26.8148146+07:00\",\"modified_by\":\"Lê Thị Huyền Hương\",\"auto_refno\":false,\"force_update\":true,\"state\":0,\"is_created_from_old_db\":false},{\"dictionary_type\":1,\"account_object_id\":\"4202660c-9388-4d3d-b3a6-dde1ee164885\",\"account_object_type\":1,\"is_vendor\":false,\"is_local_object\":false,\"is_customer\":true,\"is_employee\":false,\"inactive\":false,\"receiptable_debt_amount\":0.0,\"account_object_code\":\"A BẠCH MIÊN\",\"account_object_name\":\"Anh Bạch Miên\",\"address\":\"An Vỹ- Xã Triệu Việt Vương\",\"einvoice_contact_name\":\"Anh Bạch Miên\",\"ward_or_commune\":\"Xã Triệu Việt Vương\",\"country\":\"Việt Nam\",\"province_or_city\":\"Hưng Yên\",\"is_same_address\":false,\"pay_account\":\"3311\",\"receive_account\":\"1311\",\"closing_amount\":0.0,\"reftype\":0,\"reftype_category\":0,\"branch_id\":\"cb4662eb-a92b-454a-aea6-03c5d283463f\",\"is_convert\":false,\"is_group\":false,\"is_sync_corp\":false,\"is_remind_debt\":true,\"isUpdateRebundant\":true,\"list_object_type\":0,\"database_id\":\"00000000-0000-0000-0000-000000000000\",\"isCustomPrimaryKey\":false,\"isFromProcessBalance\":false,\"IsSaveFromMasterData\":false,\"isDeleteMasterData\":false,\"isAddMasterData\":false,\"is_sync_awh\":true,\"excel_row_index\":0,\"is_valid\":false,\"created_date\":\"2025-10-05T16:44:44.8218213+07:00\",\"created_by\":\"Vũ Thu\",\"modified_date\":\"2025-10-05T16:44:44.8218213+07:00\",\"modified_by\":\"Vũ Thu\",\"auto_refno\":false,\"force_update\":true,\"state\":0,\"is_created_from_old_db\":false},{\"dictionary_type\":1,\"account_object_id\":\"bc146e78-f4af-4296-b407-370bebb72df7\",\"gender\":1,\"number_of_dependent\":0,\"account_object_type\":1,\"is_vendor\":false,\"is_local_object\":false,\"is_customer\":true,\"is_employee\":false,\"inactive\":false,\"agreement_salary\":0.0,\"salary_coefficient\":0.0,\"insurance_salary\":0.0,\"receiptable_debt_amount\":0.0,\"account_object_code\":\"A BAN\",\"account_object_name\":\"Anh Ban\",\"address\":\"Đội 21 Đông Kết\",\"country\":\"Việt Nam\",\"tel\":\"0396818173\",\"is_same_address\":false,\"pay_account\":\"3311\",\"receive_account\":\"1311\",\"closing_amount\":0.0,\"reftype\":0,\"reftype_category\":0,\"branch_id\":\"c2267990-394f-4e05-9bad-e10c75400b3a\",\"is_convert\":false,\"is_group\":false,\"is_sync_corp\":false,\"is_remind_debt\":true,\"isUpdateRebundant\":true,\"list_object_type\":0,\"database_id\":\"00000000-0000-0000-0000-000000000000\",\"isCustomPrimaryKey\":false,\"isFromProcessBalance\":false,\"IsSaveFromMasterData\":false,\"isDeleteMasterData\":false,\"isAddMasterData\":false,\"is_sync_awh\":true,\"excel_row_index\":0,\"is_valid\":false,\"created_date\":\"2025-02-23T14:12:27.8748749+07:00\",\"created_by\":\"Lê Thị Huyền Hương\",\"modified_date\":\"2025-02-23T14:16:45.3203202+07:00\",\"modified_by\":\"Lê Thị Huyền Hương\",\"auto_refno\":false,\"force_update\":true,\"state\":0,\"is_created_from_old_db\":false},{\"dictionary_type\":1,\"account_object_id\":\"410f3638-fd16-4929-9707-00e6e3210da0\",\"gender\":1,\"number_of_dependent\":0,\"account_object_type\":0,\"is_vendor\":false,\"is_local_object\":false,\"is_customer\":true,\"is_employee\":false,\"inactive\":false,\"agreement_salary\":0.0,\"salary_coefficient\":0.0,\"insurance_salary\":0.0,\"receiptable_debt_amount\":0.0,\"account_object_code\":\"A BẰNG HẠNH\",\"account_object_name\":\"Anh Chị Bằng Hạnh\",\"address\":\"Đội 22- Đông Kết \",\"country\":\"Việt Nam\",\"is_same_address\":false,\"pay_account\":\"3311\",\"receive_account\":\"1311\",\"closing_amount\":0.0,\"reftype\":0,\"reftype_category\":0,\"branch_id\":\"c2267990-394f-4e05-9bad-e10c75400b3a\",\"is_convert\":false,\"is_group\":false,\"is_sync_corp\":false,\"is_remind_debt\":true,\"isUpdateRebundant\":true,\"list_object_type\":0,\"database_id\":\"00000000-0000-0000-0000-000000000000\",\"isCustomPrimaryKey\":false,\"isFromProcessBalance\":false,\"IsSaveFromMasterData\":false,\"isDeleteMasterData\":false,\"isAddMasterData\":false,\"is_sync_awh\":true,\"excel_row_index\":0,\"is_valid\":false,\"created_date\":\"2025-01-02T18:20:45.063063+07:00\",\"created_by\":\"Lê Thị Huyền Hương\",\"modified_date\":\"2025-01-02T18:20:45.063063+07:00\",\"modified_by\":\"Lê Thị Huyền Hương\",\"auto_refno\":false,\"force_update\":true,\"state\":0,\"is_created_from_old_db\":false},{\"dictionary_type\":1,\"account_object_id\":\"3df703d2-95db-4d00-b8fe-e46e379e8d3c\",\"account_object_type\":1,\"is_vendor\":false,\"is_local_object\":false,\"is_customer\":true,\"is_employee\":false,\"inactive\":false,\"receiptable_debt_amount\":0.0,\"account_object_code\":\"A BẰNG THẮM\",\"account_object_name\":\"Anh Bằng Thắm\",\"address\":\"Mãn Hòa - 0866445796\",\"country\":\"Việt Nam\",\"is_same_address\":false,\"pay_account\":\"3311\",\"receive_account\":\"1311\",\"closing_amount\":0.0,\"reftype\":0,\"reftype_category\":0,\"branch_id\":\"cb4662eb-a92b-454a-aea6-03c5d283463f\",\"is_convert\":false,\"is_group\":false,\"is_sync_corp\":false,\"is_remind_debt\":true,\"isUpdateRebundant\":true,\"list_object_type\":0,
+
+
+    4. Hàm để gọi api Cất đề nghị sinh chứng từ trong misa kế toán. Mặc định call với organization_unit_id f5e41242-bbc2-4d64-931d-4996ba1b4857, refdate posted_date là hôm nay
+    post https://actapp.misa.vn/apir/sync/actopen/save
+    payload ví dụ: {
+    "app_id": "f0c16081-957c-4bd5-ae34-83e4548e0fd4",
+    "org_company_code": "actapp",
+    "voucher": [
+        {
+            "voucher_type": 13,
+            "org_refid": "d3b92145-0449-4987-ac5f-5d02cfa996b2",
+            "org_refno": "HD0001_APP2",
+            "org_reftype": 3535,
+            "org_reftype_name": "Phiếu bán hàng",
+            "refdate": "2025-11-03",
+            "posted_date": "2025-11-03",
+            "journal_memo": "Đề nghị sinh chứng từ bán hàng từ ứng dụng ngoài.",
+            "account_object_id": "eefe1058-f377-4091-9c57-a9be474ebf50",
+            "account_object_name": "CÔNG TY TNHH TEST KẾT NỐI",
+            "exchange_rate": 1.0,
+            "total_amount_oc": 1050000.0,
+            "total_amount": 1050000.0,
+            "total_vat_amount_oc": 50000.0,
+            "total_vat_amount": 50000.0,
+            "branch_id":"d501cc43-326d-47a8-8286-a1fae4e23263",
+            "organization_unit_id":"f5e41242-bbc2-4d64-931d-4996ba1b4857",
+            "detail": [
+                {
+                    "inventory_item_id": "eee68bb7-8e2d-4563-9ef7-c747a7439516",
+                    "inventory_item_name": "Thoát sàn 00005 GA INAX FDV-12F",
+                    "quantity": 5.0,
+                    "unit_id": "71112249-98ce-4334-a06d-34736155fa35",
+                    "unit_name": "Cái",
+                    "unit_price_oc": 200000.0,
+                    "unit_price": 200000.0,
+                    "amount_oc": 1000000.0,
+                    "amount": 1000000.0,
+                    "vat_rate": 0.05,
+                    "vat_amount_oc": 50000.0,
+                    "vat_amount": 50000.0,
+                    "account_id": "131",
+                    "stock_id": "7a96bdf4-de82-42f4-92da-91fcca2b5685"
+                }
+            ]
+        }
+    ]
+}
+
+demo response: {
+    "Success": true,
+    "ErrorMessage": "",
+    "Data": "Hệ thống đã ghi nhận yêu cầu đồng bộ vào hàng đợi, dữ liệu sẽ được đồng bộ sang hệ thống AMIS Kế toán sớm nhất có thể. Sau khi xử lý xong yêu cầu đồng bộ, hệ thống sẽ trả kết quả đồng bộ vào đường dẫn callback mà đối tác đã cung cấp cho AMIS kế toán."
+}
+{
+    "Success": false,
+    "ErrorCode": "ExpiredToken",
+    "ErrorMessage": "Token hết hạn"
+}
+nếu access token sai (không phải hết hạn) thì api trả về 500 internal server error
+
+misa sẽ thông báo về link api callback trong #file:misa.controller.ts dạng: 0|getfly-misa-connector  | MISA callback payload: {
+0|getfly-misa-connector  |   success: true,
+0|getfly-misa-connector  |   app_id: 'f0c16081-957c-4bd5-ae34-83e4548e0fd4',
+0|getfly-misa-connector  |   error_message: '',
+0|getfly-misa-connector  |   signature: 'd0491a88d0ba2c6cdcd57af6a7c561a0b2d5d1d2cbec9961bec3868155ddeefd',
+0|getfly-misa-connector  |   data_type: 1,
+0|getfly-misa-connector  |   org_company_code: 'actapp',
+0|getfly-misa-connector  |   data: '[{"org_refid":"d3b92145-0449-4987-ac5f-5d02cfa996b2","success":true,"error_message":"","session_id":"70e4c129-1318-42be-b41e-0cf47e3ea9df","voucher_type":13}]'
+0|getfly-misa-connector  | }
+
+
+5. Cất đề nghị sinh chứng từ khi đơn hàng được duyệt trên getfly.
+Hiện tại, khi đơn hàng trên getfly được duyệt sẽ gửi thông báo về callback url trong #file:getfly.controller.ts . Hãy cất đề nghị sinh chứng từ trên misa kế toán khi callback nhận được thông báo này.
+0|getfly-misa-connector  | Received GetflyCRM callback: {
+0|getfly-misa-connector  |   headers: {
+0|getfly-misa-connector  |     connection: 'upgrade',
+0|getfly-misa-connector  |     host: 'callback.trandinhnamz.xyz',
+0|getfly-misa-connector  |     'content-length': '321',
+0|getfly-misa-connector  |     'user-agent': 'GuzzleHttp/7',
+0|getfly-misa-connector  |     'content-type': 'application/x-www-form-urlencoded'
+0|getfly-misa-connector  |   },
+0|getfly-misa-connector  |   body: {
+0|getfly-misa-connector  |     event: 'order.approved',
+0|getfly-misa-connector  |     secret_key: '',
+0|getfly-misa-connector  |     data: {
+0|getfly-misa-connector  |       event: 'order.approved',
+0|getfly-misa-connector  |       secret_key: '',
+0|getfly-misa-connector  |       data: { order_id: '69', order_code: 'DH0069' },
+0|getfly-misa-connector  |       domain: 'hoanggiahp.getflycrm.com',
+0|getfly-misa-connector  |       uid: '62f99859-ab23-480b-a7ba-ef806dbc257b'
+0|getfly-misa-connector  |     },
+0|getfly-misa-connector  |     domain: 'hoanggiahp.getflycrm.com',
+0|getfly-misa-connector  |     uid: '62f99859-ab23-480b-a7ba-ef806dbc257b'
+0|getfly-misa-connector  |   }
+0|getfly-misa-connector  | }
+0|getfly-misa-connector  | GetflyService.handleCallback: {
+0|getfly-misa-connector  |   event: 'order.approved',
+0|getfly-misa-connector  |   secret_key: '',
+0|getfly-misa-connector  |   data: {
+0|getfly-misa-connector  |     event: 'order.approved',
+0|getfly-misa-connector  |     secret_key: '',
+0|getfly-misa-connector  |     data: { order_id: '69', order_code: 'DH0069' },
+0|getfly-misa-connector  |     domain: 'hoanggiahp.getflycrm.com',
+0|getfly-misa-connector  |     uid: '62f99859-ab23-480b-a7ba-ef806dbc257b'
+0|getfly-misa-connector  |   },
+0|getfly-misa-connector  |   domain: 'hoanggiahp.getflycrm.com',
+0|getfly-misa-connector  |   uid: '62f99859-ab23-480b-a7ba-ef806dbc257b'
+0|getfly-misa-connector  | }
