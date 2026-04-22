@@ -1,50 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { MisaService } from '../misa/misa.service';
+import { GetflyApiService } from './getfly-api.service';
 
 @Injectable()
 export class GetflyService {
-	constructor(private readonly misaService: MisaService) {}
+  constructor(
+    private readonly misaService: MisaService,
+    private readonly getflyApiService: GetflyApiService
+  ) {}
 
-	// Xử lý dữ liệu callback từ GetflyCRM
-	async handleCallback(data: any): Promise<any> {
-		console.log('📨 GetflyService.handleCallback:', data);
-		
-		// Kiểm tra nếu là event duyệt đơn hàng
-		if (data.event === 'order.approved' && data.data?.data) {
-			const orderData = data.data.data;
-			console.log('✅ Order approved - creating MISA voucher:', orderData);
-			
-			try {
-				// Gọi API tạo chứng từ MISA
-				const misaResult = await this.misaService.createSalesVoucher({
-					order_id: orderData.order_id,
-					order_code: orderData.order_code,
-					// Có thể thêm các trường khác từ GetflyCRM nếu có
-					total_amount: 1050000, // Tạm thời fix cứng
-					quantity: 1,
-					unit_price: 1000000
-				});
-				
-				console.log('📝 MISA voucher created:', misaResult);
-				
-				return { 
-					status: 'success', 
-					received: data,
-					misa_result: misaResult
-				};
-				
-			} catch (error) {
-				console.error('❌ Error creating MISA voucher:', error.message);
-				
-				return { 
-					status: 'success', 
-					received: data,
-					misa_error: error.message
-				};
-			}
-		}
-		
-		// Trả về kết quả xử lý cho các event khác
-		return { status: 'success', received: data };
-	}
+  async handleCallback(data: any): Promise<any> {
+    console.log('📨 GetflyService.handleCallback:', data);
+
+    if (data.event !== 'order.approved') {
+      return { status: 'success', message: `Ignored event: ${data.event}` };
+    }
+
+    const orderId = data.data?.data?.order_id;
+    const orderCode = data.data?.data?.order_code;
+
+    if (!orderId) {
+      console.warn('⚠️ order.approved event missing order_id');
+      return { status: 'success', message: 'No order_id in callback' };
+    }
+
+    console.log(`✅ Order approved: ${orderCode} (id=${orderId}), fetching details...`);
+
+    try {
+      const getflyOrder = await this.getflyApiService.getOrderById(orderId);
+
+      const misaResult = await this.misaService.createSalesVoucher(getflyOrder);
+      console.log('📝 MISA voucher created:', misaResult);
+
+      return { status: 'success', order_id: orderId, order_code: orderCode, misa_result: misaResult };
+    } catch (error) {
+      console.error(`❌ Error processing order ${orderId}:`, error.message);
+      return { status: 'error', order_id: orderId, order_code: orderCode, error: error.message };
+    }
+  }
 }
