@@ -16,8 +16,10 @@ export class GetflyService {
       return { status: 'success', message: `Ignored event: ${data.event}` };
     }
 
-    const orderId = data.data?.data?.order_id;
-    const orderCode = data.data?.data?.order_code;
+    // Support both formats: data.data.data.order_id (old) and data.data.order_id (new)
+    const innerData = data.data?.data?.order_id ? data.data.data : data.data;
+    const orderId = innerData?.order_id;
+    const orderCode = innerData?.order_code;
 
     if (!orderId) {
       console.warn('⚠️ order.approved event missing order_id');
